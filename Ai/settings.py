@@ -129,5 +129,5 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 LOGIN_URL = 'register'
 
-MEDIA_URL = "/message/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "message")
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
