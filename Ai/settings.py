@@ -30,7 +30,7 @@ CSRF_COOKIE_SECURE = True          # обов’язково для HTTPS
 CSRF_TRUSTED_ORIGINS = ["https://aisite-production.up.railway.app"]
 SESSION_COOKIE_SECURE = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["aisite-production.up.railway.app"]
 
 
 # Application definition
