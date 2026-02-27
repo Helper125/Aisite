@@ -1,0 +1,120 @@
+:root {
+    --blue: #3b82f6;
+    --blue-dark: #1e3a8a;
+    --blue-mid: #93c5fd;
+    --blue-light: #eff6ff;
+    --white: #ffffff;
+    --text: #1f2937;
+    --text-light: #6b7280;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f3f4f6;
+    font-family: 'Inter', sans-serif;
+}
+
+.card {
+    background: var(--white);
+    border: 1px solid var(--blue-mid);
+    border-radius: 20px;
+    padding: 40px 36px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 8px 32px rgba(59,130,246,0.10);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+
+.card-header .logo-dot {
+    width: 14px;
+    height: 14px;
+}
+
+.card-header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--blue-dark);
+}
+
+.card-header p {
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+}
+
+.field input {
+    padding: 10px 14px;
+    border: 1.5px solid var(--blue-mid);
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: var(--blue-light);
+}
+
+.field input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+    background: var(--white);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 11px;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(59,130,246,0.28);
+    transition: background 0.2s, transform 0.15s;
+}
+
+.submit-btn:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+}
+
+.card-footer {
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--text-light);
+}
+
+.card-footer a {
+    color: var(--blue);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.card-footer a:hover { text-decoration: underline; }

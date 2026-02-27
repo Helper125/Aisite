@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus AI — Anmelden</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'style_login.css' %}">
+</head>
+<body>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="logo-dot"></div>
+            <h1>Willkommen zurück</h1>
+            <p>Melden Sie sich bei Ihrem Nexus AI Konto</p>
+        </div>
+
+        <form method="post" style="display:flex;flex-direction:column;gap:16px;">
+            {% csrf_token %}
+
+            <div class="field">
+                <label for="username">Benutzername</label>
+                <input type="text" id="username" name="username" placeholder="Benutzernamen eingeben" required>
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Passwort eingeben" required>
+            </div>
+
+            <button type="submit" class="submit-btn">Anmelden</button>
+        </form>
+
+        <div class="card-footer">
+            Sie haben noch kein Konto? <a href="{% url 'register' %}">Registrieren</a>
+        </div>
+    </div>
+
+</body>
+</html>

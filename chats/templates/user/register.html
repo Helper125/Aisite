@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus AI — Registrieren</title>
+    <link rel="stylesheet" href="{% static 'style_register.css' %}">
+</head>
+<body>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="logo-dot"></div>
+            <h1>Konto erstellen</h1>
+            <p>Treten Sie Nexus AI bei und beginnen Sie zu chatten</p>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="submit-btn">Registrieren</button>
+        </form>
+
+        <div class="card-footer">
+            Haben Sie bereits ein Konto? <a href="{% url 'login' %}">Anmelden</a>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus AI — Chat</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+    <header>
+        <div class="logo-dot"></div>
+        <h1>Nexus AI</h1>
+    </header>
+
+    {% if message %}
+        <div class="messages">
+            {% for messages in message %}
+                {% if messages.is_ai == True %}
+                    <div class="msg ai">
+                        <div class="avatar">AI</div>
+                        <div class="bubble">
+                            {% if messages.file %}
+                                <img src="{{ messages.file.url }}" alt="image">
+                            {% endif %}
+                            <h4>{{ messages.text }}</h4>
+                            {% if messages.audio %}
+                                <audio controls>
+                                    <source src="{{ messages.audio.url }}" type="audio/mpeg">
+                                </audio>
+                            {% else %}
+                                <form method="post" action="{% url 'speak_message' messages.id %}" class="speak-form">
+                                {% csrf_token %}
+                                <button type="submit" class="speak-btn">🔊 Sprechen</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="msg user">
+                        <div class="avatar">U</div>
+                        <div class="bubble">
+                            {% if messages.file %}
+                                <img src="{{ messages.file.url }}" alt="image">
+                            {% endif %}
+                            <h4>{{ messages.text }}</h4>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty">
+            <div style="font-size:2.4rem;margin-bottom:4px;">💬</div>
+            <h2>Ein Gespräch beginnen</h2>
+            <p>Fragen Sie mich alles – ich bin hier, um Ihnen dabei zu helfen, schneller zu denken und smarter zu arbeiten.</p>
+        </div>
+    {% endif %}
+
+    <div class="input-bar">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="input-box">
+                <label class="file-label" title="Attach file">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                    <input type="file" name="file" accept="image/*">
+                </label>
+                <input type="text" name="message_text" id="recognition" placeholder="Type a message…">
+                <button type="button" class="icon-btn" id="start-btn" title="Voice input">🎙️</button>
+                <button type="submit" class="send-btn" title="Send">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+            </div>
+        </form>
+        <p class="hint">Nexus AI können Fehler machen. Überprüfen Sie wichtige Informationen.</p>
+    </div>
+
+    <script>
+        const recognition = new webkitSpeechRecognition();
+        recognition.lang = ["uk-UA", "de-DE", "de-DE"];
+
+        recognition.onresult = (event) => {
+            document.getElementById("recognition").value = event.results[0][0].transcript;
+        };
+
+        document.getElementById("start-btn").onclick = (e) => {
+            e.preventDefault();
+            recognition.start();
+        };
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,250 @@
+:root {
+        --blue:       #3b82f6;
+        --blue-dark:  #1e3a8a;
+        --blue-light: #eff6ff;
+        --blue-mid:   #dbeafe;
+        --text:       #334155;
+        --text-light: #64748b;
+        --white:      #ffffff;
+        --radius:     16px;
+    }
+
+    *{ margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: var(--blue-light);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* ── Header ── */
+    header {
+        background: var(--white);
+        padding: 16px 32px;
+        border-bottom: 1px solid var(--blue-mid);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 2px 12px rgba(59,130,246,0.07);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .logo-dot {
+        width: 10px; height: 10px;
+        background: var(--blue);
+        border-radius: 50%;
+        box-shadow: 0 0 8px rgba(59,130,246,0.5);
+    }
+
+    header h1 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--blue-dark);
+    }
+
+    /* ── Messages ── */
+    .messages {
+        flex: 1;
+        padding: 28px 20px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        max-width: 720px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .msg {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+    }
+
+    .msg.user { flex-direction: row-reverse; }
+
+    .avatar {
+        width: 32px; height: 32px;
+        border-radius: 50%;
+        font-size: 0.7rem;
+        font-weight: 600;
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .msg.ai   .avatar { background: var(--blue-mid); color: var(--blue); border: 1.5px solid #bfdbfe; }
+    .msg.user .avatar { background: var(--blue); color: var(--white); }
+
+    .bubble {
+        padding: 11px 15px;
+        border-radius: var(--radius);
+        font-size: 0.88rem;
+        line-height: 1.6;
+        max-width: 560px;
+    }
+
+    .msg.ai .bubble {
+        background: var(--white);
+        border: 1px solid var(--blue-mid);
+        border-bottom-left-radius: 4px;
+        color: var(--text);
+        box-shadow: 0 2px 8px rgba(59,130,246,0.06);
+    }
+
+    .msg.user .bubble {
+        background: var(--blue);
+        border-bottom-right-radius: 4px;
+        color: var(--white);
+        box-shadow: 0 4px 14px rgba(59,130,246,0.25);
+    }
+
+    .bubble h4 { font-weight: 400; }
+
+    .bubble img {
+        max-width: 220px;
+        border-radius: 10px;
+        display: block;
+        margin-bottom: 8px;
+        border: 1px solid var(--blue-mid);
+    }
+
+    .speak-form { margin-top: 9px; }
+
+    .speak-btn {
+        padding: 4px 12px;
+        background: var(--blue-light);
+        border: 1px solid #bfdbfe;
+        border-radius: 999px;
+        color: var(--blue);
+        font-family: 'Inter', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .speak-btn:hover { background: var(--blue-mid); }
+
+    audio {
+        display: block;
+        margin-top: 8px;
+        height: 30px;
+        accent-color: var(--blue);
+    }
+
+    /* ── Input bar ── */
+    .input-bar {
+        padding: 12px 20px 28px;
+        max-width: 720px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .input-box {
+        background: var(--white);
+        border: 1.5px solid var(--blue-mid);
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 8px 8px 18px;
+        box-shadow: 0 4px 16px rgba(59,130,246,0.08);
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-box:focus-within {
+        border-color: var(--blue);
+        box-shadow: 0 4px 20px rgba(59,130,246,0.18);
+    }
+
+    .input-box input[type="text"] {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.875rem;
+        color: var(--text);
+        background: transparent;
+        min-width: 0;
+    }
+
+    .input-box input[type="text"]::placeholder { color: #94a3b8; }
+
+    .file-label {
+        display: flex; align-items: center; justify-content: center;
+        width: 34px; height: 34px;
+        border-radius: 50%;
+        border: 1px solid var(--blue-mid);
+        color: var(--text-light);
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+        flex-shrink: 0;
+    }
+
+    .file-label:hover { background: var(--blue-mid); color: var(--blue); }
+    .file-label input { display: none; }
+
+    .icon-btn {
+        display: flex; align-items: center; justify-content: center;
+        width: 34px; height: 34px;
+        border-radius: 50%;
+        border: 1px solid var(--blue-mid);
+        background: transparent;
+        color: var(--text-light);
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+        flex-shrink: 0;
+        font-size: 0.85rem;
+    }
+
+    .icon-btn:hover { background: var(--blue-mid); color: var(--blue); }
+
+    .send-btn {
+        display: flex; align-items: center; justify-content: center;
+        width: 38px; height: 38px;
+        border-radius: 50%;
+        background: var(--blue);
+        border: none;
+        color: var(--white);
+        cursor: pointer;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+        transition: background 0.2s, transform 0.15s;
+    }
+
+    .send-btn:hover { background: #2563eb; transform: scale(1.07); }
+
+    .hint {
+        text-align: center;
+        font-size: 0.7rem;
+        color: #94a3b8;
+        margin-top: 10px;
+    }
+
+    /* ── Empty ── */
+    .empty {
+        flex: 1; display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        text-align: center; gap: 10px; padding: 40px 20px;
+    }
+
+    .empty h2 {
+        font-size: 1.5rem; font-weight: 700;
+        color: var(--blue-dark);
+    }
+
+    .empty p {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        max-width: 300px;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+        .messages, .input-bar { padding-left: 12px; padding-right: 12px; }
+        header { padding: 14px 16px; }
+    }
