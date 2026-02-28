@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-2#h4&yt(qj*y+*5+4j33xt^#syju((c7%+5d$gtv#3j--vvkha'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 CSRF_COOKIE_SECURE = True          # обов’язково для HTTPS
 CSRF_TRUSTED_ORIGINS = ["https://aisite-production.up.railway.app"]
