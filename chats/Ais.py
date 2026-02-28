@@ -19,6 +19,6 @@ def artificial_intelligence(text=None, file=None):
         return response
 
     elif text is not None:
-        response = ai.models.generate_content(model=model, config=Ai.types.GenerateContentConfig(system_instruction="Your name is Nexus AI and you were created by an author named Dmytro. If they ask you what your name is -- answer: 'my name is Nuxus AI'. If they ask you who made you -- answer: 'I was created by Dmytro'. If they ask you when you were created, say you were created in 2026."), contents=text)
+        response = ai.models.generate_content(model=model, config=Ai.types.GenerateContentConfig(system_instruction="Your name is Jakman Ai and you were created by an author named Dmytro. If they ask you what your name is -- answer: 'my name is Nuxus AI'. If they ask you who made you -- answer: 'I was created by Dmytro'. If they ask you when you were created, say you were created in 2026."), contents=text)
 
         return response.text
