@@ -1,4 +1,4 @@
-﻿aiohappyeyeballs==2.6.1
+aiohappyeyeballs==2.6.1
 aiohttp==3.13.3
 aiosignal==1.4.0
 annotated-types==0.7.0
@@ -13,6 +13,7 @@ click==8.1.8
 colorama==0.4.6
 cryptography==46.0.5
 distro==1.9.0
+dj-database-url==3.1.2
 Django==6.0.2
 frozenlist==1.8.0
 google-ai-generativelanguage==0.6.15
@@ -25,6 +26,7 @@ googleapis-common-protos==1.72.0
 grpcio==1.78.0
 grpcio-status==1.71.2
 gTTS==2.5.4
+gunicorn==25.1.0
 h11==0.16.0
 httpcore==1.0.9
 httplib2==0.31.2
@@ -32,10 +34,12 @@ httpx==0.28.1
 idna==3.11
 langdetect==1.0.9
 multidict==6.7.1
+packaging==26.0
 pillow==12.1.1
 propcache==0.4.1
 proto-plus==1.27.1
 protobuf==5.29.6
+psycopg2-binary==2.9.11
 pyasn1==0.6.2
 pyasn1_modules==0.4.2
 pycparser==3.0
@@ -58,7 +62,5 @@ tzdata==2025.3
 uritemplate==4.2.0
 urllib3==2.6.3
 websockets==15.0.1
+whitenoise==6.12.0
 yarl==1.22.0
-gunicorn
-whitenoise
-dj-database-url
