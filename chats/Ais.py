@@ -3,9 +3,9 @@ from google.genai import types
 from PIL import Image
 import os
 
-# GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-ai = Ai.Client(api_key="AIzaSyCXp3DRJzRRtJ02WrdMKyMg_Db5F5-tl-g")
+ai = Ai.Client(api_key="GEMINI_API_KEY")
 model = "gemini-2.5-flash"
 
 
