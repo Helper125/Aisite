@@ -5,11 +5,15 @@ import os
 
 # GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-ai = Ai.Client(api_key="AIzaSyD6I4Zm9m0U4au95k3pmsq-UPhHdxh774I")
+ai = Ai.Client(api_key="AIzaSyCXp3DRJzRRtJ02WrdMKyMg_Db5F5-tl-g")
 model = "gemini-2.5-flash"
 
 
 def artificial_intelligence(text=None, file=None):
+
+    for m in ai.models.list():
+        print(m.name)
+
     if file is not None:
         image_bytes = file.read()
         if text is None:
