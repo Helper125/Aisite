@@ -32,6 +32,7 @@ CSRF_TRUSTED_ORIGINS = ["https://aisite-production.up.railway.app"]
 SESSION_COOKIE_SECURE = True
 
 ALLOWED_HOSTS = ["aisite-production.up.railway.app"]
+# ALLOWED_HOSTS = ["*"]
 
 
 
