@@ -5,7 +5,7 @@ from PIL import Image
 import os
 
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyDZbSj0ZfoFkE-0_ZWXzdbGAD06O9S8c9U,AIzaSyA_OfuUcfeITmZKiZkGK1d4KKE3OgTmA0A").split(",")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").split(",")
 
 model = "gemini-2.5-flash"
 

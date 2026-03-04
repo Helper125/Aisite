@@ -10,6 +10,4 @@ urlpatterns = [
     path("login/", login, name="login"),
     path("logout/", logout, name="logout"),
     path("speak_message<int:message_id>/", speak_messagge, name="speak_message")
-] 
-
-urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
