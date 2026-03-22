@@ -1,12 +1,18 @@
 from django.db import models
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
-User = get_user_model()
 
 # Create your models here.
 
+class Users(AbstractUser):
+    username = models.CharField(blank=True, max_length=100, unique=True)
+    photo_profil = models.ImageField(blank=True, upload_to="media/", default="media/defaul_photo_user_rNZvkqC.png")
+    at_created = models.DateTimeField(auto_now_add=True)
+
 class Chat(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100, blank=True, null=True, default="Keine")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     at_created = models.DateTimeField(auto_now_add=True)
 
 

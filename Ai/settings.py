@@ -32,7 +32,7 @@ CSRF_TRUSTED_ORIGINS = ["https://aisite-production.up.railway.app"]
 SESSION_COOKIE_SECURE = True
 
 ALLOWED_HOSTS = ["aisite-production.up.railway.app"]
-# ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*"]
 
 
 
@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'chats'
 ]
 
+AUTH_USER_MODEL = 'chats.Users'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -61,6 +63,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Ai.urls'
+
 
 TEMPLATES = [
     {
@@ -89,9 +92,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': 'FEPYwLcSdDDcvzWgFIdsSRJvegjqNqLz',
-        'HOST': 'crossover.proxy.rlwy.net',
-        'PORT': 41640
+        'PASSWORD': 'zCfythXKbWJPdrDXCmpzoimcpRjtpgMT',
+        'HOST': 'caboose.proxy.rlwy.net',
+        'PORT': 43329
     },
 }
 

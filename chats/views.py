@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Chat, Message
 from django.contrib.auth.decorators import login_required
-from .forms import Register_login
+from .forms import Register_login, ChatName, ProfilEdit
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from .Ais import artificial_intelligence
 import speech_recognition as sr
@@ -10,13 +10,23 @@ import os
 from django.conf import settings
 from django.http import FileResponse
 from langdetect import *
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 # Create your views here.
 
 @login_required
-def chats(request):
-    chat, _ = Chat.objects.get_or_create(user=request.user)
+def chats(request, chat_id=None):
+    all_chats = Chat.objects.filter(user=request.user)
+    if not all_chats.exists():
+        chat = Chat.objects.create(user=request.user, title="zuerst")
+    else:
+        if chat_id:
+            chat = get_object_or_404(Chat, id=chat_id, user=request.user)
+        else:
+            chat = all_chats.first()
     message = Message.objects.filter(chat=chat)
 
     recognized_text = None
@@ -52,7 +62,7 @@ def chats(request):
 
         
 
-        return redirect("/")
+        return redirect("chat", chat_id=chat_id)
 
     return render(request, "chat.html", {"chat":chat, "message":message, "recognized_text":recognized_text})
 
@@ -74,7 +84,7 @@ def speak_messagge(request, message_id):
         message.audio.name = file_path
         message.save()
 
-        return redirect("/")
+        return redirect("chat", chat_id=message.chat.id)
 
 
 def register(request):
@@ -107,3 +117,48 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return redirect('login')
+
+@login_required
+def profil_user(request):
+    profil = User.objects.get(username=request.user.username)
+
+    all_chats = Chat.objects.filter(user=request.user)
+        
+
+    return render(request, 'profil.html', {'profil':profil, "all_chats":all_chats})
+
+
+def add_new_chat(request):
+    chat = Chat.objects.create(user=request.user, title="None")
+
+    return redirect("profil_user")
+
+
+@login_required
+def edition_chat(request, chat_id):
+    edit_chat = get_object_or_404(Chat, id=chat_id)
+
+    if request.method == "POST":
+        form = ChatName(request.POST, instance=edit_chat)
+        if form.is_valid():
+            form.save()
+            return redirect("profil_user")
+    else:
+        form = ChatName(instance=edit_chat)
+    
+    return render(request, "form.html", {"form":form})
+
+
+@login_required
+def edition_profil(request, username):
+    edit_profil = get_object_or_404(User, username=username)
+
+    if request.method == "POST":
+        form = ProfilEdit(request.POST, request.FILES, instance=edit_profil)
+        if form.is_valid():
+            form.save()
+            return redirect("profil_user")
+    else:
+        form = ProfilEdit(instance=edit_profil)
+    
+    return render(request, "profil_form.html", {"form":form})

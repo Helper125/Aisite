@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit</title>
+    <style>
+        :root {
+            --blue: #3b82f6;
+            --blue-dark: #1e3a8a;
+            --blue-light: #eff6ff;
+            --blue-mid: #dbeafe;
+            --text: #334155;
+            --text-light: #64748b;
+            --white: #ffffff;
+            --radius: 16px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--blue-light);
+            color: var(--text);
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--blue-mid);
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        header a {
+            color: var(--blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        /* Form container */
+        .form-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: var(--white);
+            padding: 25px;
+            border-radius: var(--radius);
+            border: 1px solid var(--blue-mid);
+            box-shadow: 0 4px 16px rgba(59,130,246,0.08);
+        }
+
+        .form-container h2 {
+            margin-bottom: 15px;
+            color: var(--blue-dark);
+        }
+
+        form p {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+            color: var(--text-light);
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid var(--blue-mid);
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--blue);
+        }
+
+        /* Button */
+        button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 11px;
+            border: none;
+            border-radius: 999px;
+            background: var(--blue);
+            color: var(--white);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="{% url 'profil_user' %}">← Zurück</a>
+</header>
+
+<div class="form-container">
+    <h2>Edit</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Speichern</button>
+    </form>
+</div>
+
+</body>
+</html>
