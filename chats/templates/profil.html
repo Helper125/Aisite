@@ -158,6 +158,7 @@
             <a href="{% url 'chat' alls.id %}">{{ alls.title }}</a>
             <h3>{{ alls.at_created }}</h3>
             <a href="{% url 'edition_chat' alls.id %}" class="edit">Bearbeiten</a>
+            <a href="{% url 'delete_chat' alls.id %}" class="edit">Löschen</a>
         </div>
     {% endfor %}
 </div>

@@ -162,3 +162,12 @@ def edition_profil(request, username):
         form = ProfilEdit(instance=edit_profil)
     
     return render(request, "profil_form.html", {"form":form})
+
+
+@login_required
+def delete_chat(request, chat_id):
+    del_chat = get_object_or_404(Chat, id=chat_id)
+
+    del_chat.delete()
+
+    return redirect("profil_user")
