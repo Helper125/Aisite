@@ -49,6 +49,9 @@
         z-index: 10;
     }
 
+    header a {
+    }
+
     .logo-dot {
         width: 10px;
         height: 10px;
@@ -340,7 +343,14 @@
     text-decoration: none;
     font-size: 0.85rem;
     transition: 0.2s;">Profil</a>
-    <a href="{% url 'list_user_in_togetherChat' chat.id %}">list user</a>
+    <a href="{% url 'list_user_in_togetherChat' chat.id %}" style="display: inline-block;
+    background: var(--blue);
+    color: var(--white);
+    padding: 10px 18px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: 0.2s;">Benutzer auflisten</a>
     </header>
 
     {% if message %}
