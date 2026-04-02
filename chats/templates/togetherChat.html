@@ -443,14 +443,17 @@
 
     <script>
         const chatId = "{{ chat.id }}";
+        const username = "{{ request.user.username }}";
+        const userAvatar = "{{ request.user.photo_profil.url }}";
+
         const protocol = window.location.protocol === "https:" ? "wss" : "ws";
         const socket = new WebSocket(`${protocol}://${window.location.host}/ws/chat/${chatId}/`);
 
-        socket.onopen  = () => console.log("✅ WebSocket підключено");
+        socket.onopen = () => console.log("✅ WebSocket підключено");
         socket.onerror = (e) => console.log("❌ WebSocket помилка", e);
         socket.onclose = () => console.log("❌ WebSocket закритий");
 
-        // ── Гарантуємо що блок messages існує ────────────────────────────
+        // ── Контейнер для повідомлень ─────────────────────────
         function getMessagesContainer() {
             let container = document.getElementById("messages");
             if (!container) {
@@ -465,13 +468,11 @@
             return container;
         }
 
-        // ── Рендер повідомлення ───────────────────────────────────────────
-        function renderMessage({ message_type, text, file_url, filename }) {
+        // ── Рендер повідомлення ───────────────────────────────
+        function renderMessage({ message_type, text, file_url, filename, avatar_url, sender_username }) {
             const container = getMessagesContainer();
             const isAI = message_type === 'ai';
-
-            const div = document.createElement("div");
-            div.classList.add("msg", isAI ? "ai" : "user");
+            const isCurrentUser = sender_username === username;
 
             let fileHTML = '';
             if (file_url) {
@@ -481,11 +482,21 @@
                     : `<a href="${file_url}" target="_blank">📎 ${filename || 'файл'}</a>`;
             }
 
+            const div = document.createElement("div");
+
+            // ── Клас для повідомлення ──
+            if (isAI) div.classList.add("msg", "ai");
+            else if (isCurrentUser) div.classList.add("msg", "user");
+            else div.classList.add("msg"); // Інший користувач зліва
+
             div.innerHTML = `
-                <div class="avatar">${isAI ? 'AI' : 'U'}</div>
-                <div class="bubble">
-                    ${fileHTML}
-                    ${text ? `<h4>${text}</h4>` : ''}
+                <div class="avatar">${isAI ? 'AI' : `<img src="${avatar_url}">`}</div>
+                <div class="content">
+                    <div class="username">${isAI ? 'AI' : sender_username}</div>
+                    <div class="bubble">
+                        ${fileHTML}
+                        ${text ? `<h4>${text}</h4>` : ''}
+                    </div>
                 </div>
             `;
 
@@ -493,7 +504,7 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        // ── Індикатор "AI друкує..." ──────────────────────────────────────
+        // ── Показати "AI друкує..." ─────────────────────────
         function showTyping() {
             const container = getMessagesContainer();
             const div = document.createElement("div");
@@ -501,7 +512,10 @@
             div.id = "typing-indicator";
             div.innerHTML = `
                 <div class="avatar">AI</div>
-                <div class="bubble"><h4>…</h4></div>
+                <div class="content">
+                    <div class="username">AI</div>
+                    <div class="bubble"><h4>…</h4></div>
+                </div>
             `;
             container.appendChild(div);
             container.scrollTop = container.scrollHeight;
@@ -511,16 +525,23 @@
             document.getElementById("typing-indicator")?.remove();
         }
 
-        // ── Отримання повідомлень ─────────────────────────────────────────
+        // ── Обробка повідомлень від сервера ──────────────────
         socket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             if (data.type === 'chat_message') {
                 hideTyping();
-                renderMessage(data);
+                renderMessage({
+                    message_type: data.message_type,
+                    text: data.text,
+                    file_url: data.file_url,
+                    filename: data.filename,
+                    avatar_url: data.avatar_url || userAvatar,
+                    sender_username: data.user || 'AI'
+                });
             }
         };
 
-        // ── Голос ────────────────────────────────────────────────────────
+        // ── Голосовий ввод ───────────────────────────────────
         const recognition = new webkitSpeechRecognition();
         recognition.lang = "de-DE";
         recognition.onresult = (event) => {
@@ -531,7 +552,7 @@
             recognition.start();
         };
 
-        // ── Файл preview ──────────────────────────────────────────────────
+        // ── Попередній перегляд файлу ───────────────────────
         document.getElementById("file-input").onchange = (e) => {
             const file = e.target.files[0];
             if (!file) return;
@@ -540,12 +561,19 @@
             img.style.display = "block";
         };
 
-        // ── Головна функція відправки ─────────────────────────────────────
+        // ── Перетворення файлу в base64 ─────────────────────
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // ── Відправка повідомлення ──────────────────────────
         async function sendMessage(forAI) {
-            if (socket.readyState !== WebSocket.OPEN) {
-                console.log("❌ сокет не відкритий");
-                return;
-            }
+            if (socket.readyState !== WebSocket.OPEN) return;
 
             const textInput = document.getElementById("recognition");
             const fileInput = document.getElementById("file-input");
@@ -561,34 +589,25 @@
                 payload.filename = file.name;
                 payload.mime_type = file.type;
 
-                renderMessage({
-                    message_type: 'user',
-                    text,
-                    file_url: URL.createObjectURL(file),
-                    filename: file.name,
-                });
-
+                // очищення прев'ю
                 fileInput.value = '';
                 const preview = document.getElementById("preview");
                 preview.src = '';
                 preview.style.display = 'none';
-            } else {
-                renderMessage({ message_type: 'user', text });
             }
 
-            socket.send(JSON.stringify(payload));
             textInput.value = "";
+
+            socket.send(JSON.stringify(payload));
 
             if (forAI) showTyping();
         }
 
-        // ── Кнопка Send (без AI) ──────────────────────────────────────────
+        // ── Кнопки відправки ───────────────────────────────
         document.getElementById("send-btn").onclick = () => sendMessage(false);
-
-        // ── Кнопка AI ────────────────────────────────────────────────────
         document.getElementById("ai-btn").onclick = () => sendMessage(true);
 
-        // ── Enter → Send без AI ───────────────────────────────────────────
+        // ── Enter → Send без AI ─────────────────────────────
         document.getElementById("recognition").addEventListener("keydown", (e) => {
             if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
@@ -596,16 +615,7 @@
             }
         });
 
-        function toBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        }
-
-        // ── Скрол вниз при завантаженні ──────────────────────────────────
+        // ── Скрол вниз при завантаженні ─────────────────────
         window.addEventListener("load", () => {
             const container = document.getElementById("messages");
             if (container) container.scrollTop = container.scrollHeight;

@@ -46,6 +46,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'file_url': user_message.file.url if user_message.file else None,
                 'filename': data.get('filename'),
                 'user': user.username,
+                'avatar_url': user.photo_profil.url if hasattr(user, 'photo_profil') and user.photo_profil else None,
                 'message_id': user_message.id,
                 'timestamp': user_message.created_at.isoformat(),
             }
