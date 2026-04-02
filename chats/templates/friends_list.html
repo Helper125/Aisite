@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freundin</title>
+</head>
+<body>
+    <style>
+        :root {
+            --blue: #3b82f6;
+            --blue-dark: #1e3a8a;
+            --blue-light: #eff6ff;
+            --blue-mid: #dbeafe;
+            --text: #334155;
+            --text-light: #64748b;
+            --white: #ffffff;
+            --gold: #facc15;
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--blue-light);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        header a {
+            text-decoration: none;
+            background: var(--blue);
+            color: var(--white);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+
+        header a:hover {
+            background: var(--blue-dark);
+        }
+
+        /* Search form */
+        form {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        form input[type="search"] {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: var(--radius);
+            border: 1.5px solid var(--blue-mid);
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        form input[type="search"]:focus {
+            border-color: var(--blue);
+            box-shadow: 0 2px 8px rgba(59,130,246,0.2);
+        }
+
+        form button {
+            background: var(--blue);
+            color: var(--white);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+
+        form button:hover {
+            background: var(--blue-dark);
+        }
+
+        /* Result blocks */
+        .result-item, .friend-item {
+            background: var(--white);
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-item h3, .friend-item h3 {
+            margin: 0;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .result-item h4, .friend-item h4 {
+            margin: 0;
+            font-weight: 400;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .result-item a, .friend-item a {
+            background: var(--blue);
+            color: var(--white);
+            padding: 6px 14px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+
+        .result-item a:hover, .friend-item a:hover {
+            background: var(--blue-dark);
+        }
+
+        /* Special messages */
+        .result-item .info, .friend-item .info {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .result-item a.request {
+            background: #10b981; /* green for request button */
+        }
+
+        .result-item a.request:hover {
+            background: #047857;
+        }
+
+        .result-item a.unfriend {
+            background: #ef4444; /* red for delete */
+        }
+
+        .result-item a.unfriend:hover {
+            background: #b91c1c;
+        }
+    </style>
+    <header>
+    Freundin in Jakman Ai
+    <a href="{% url 'profil_user' %}">Profil</a>
+    <a href="{% url 'all_friends_request' %}">Freundschaftsanfrage</a>
+    </header>
+
+    <form>
+        <input type="search" name="query" placeholder="Search friends…">
+        <button type="submit">Suchen</button>
+    </form>
+
+    {% if friends_search %}
+        <a href="{% url 'friends-list' %}">Zurück</a>
+        <h2>Suchergebnisse:</h2>
+        {% for user in friends_search %}
+            <div class="result-item">
+                <h3>{{ user.username }}</h3>
+                <div class="info">
+                    {% if user.id in friends_ids %}
+                        <span>Diese Person ist dein Freund</span>
+                    {% elif user.id in requests_ids %}
+                        <span>Du hast eine Freundschaftsanfrage gesendet</span>
+                    {% else %}
+                        <a href="{% url 'add_request_for_friend' user.id %}" class="request">Freundschaftsanfrage</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        {% if friends %}
+            <h2>Deine Freunde</h2>
+            {% for fr in friends %}
+                <div class="friend-item">
+                    <div>
+                        <h3>{{ fr.friend }}</h3>
+                        <h4>{{ fr.created_at }}</h4>
+                    </div>
+                    <a href="{% url 'delete-friend' fr.id %}" class="unfriend">Löschen</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h2>Du hast keine Freunde</h2>
+        {% endif %}
+    {% endif %}
+</body>
+</html>

@@ -1,167 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil {{ profil.username }}</title>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil {{ profil.username }}</title>
     <style>
-        :root {
-            --blue: #3b82f6;
-            --blue-dark: #1e3a8a;
-            --blue-light: #eff6ff;
-            --blue-mid: #dbeafe;
-            --text: #334155;
-            --text-light: #64748b;
-            --white: #ffffff;
-            --radius: 16px;
-        }
+    :root {
+        --blue: #3b82f6;
+        --blue-dark: #1e3a8a;
+        --blue-light: #eff6ff;
+        --blue-mid: #dbeafe;
+        --text: #334155;
+        --text-light: #64748b;
+        --white: #ffffff;
+        --gold: #facc15;
+        --radius: 16px;
+    }
 
-        *{ margin:0; padding:0; box-sizing:border-box; }
+    *{ margin:0; padding:0; box-sizing:border-box; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--blue-light);
-            color: var(--text);
-        }
+    body {
+        font-family: 'Inter', sans-serif;
+        background: var(--blue-light);
+        color: var(--text);
+    }
 
-        /* HEADER */
-        header {
-            background: var(--white);
-            padding: 16px 24px;
-            border-bottom: 1px solid var(--blue-mid);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    header {
+        background: var(--white);
+        padding: 16px 24px;
+        border-bottom: 1px solid var(--blue-mid);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        header a {
-            color: var(--blue);
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
+    header a {
+        color: var(--blue);
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
 
-        /* PROFILE */
-        .profile {
-            max-width: 700px;
-            margin: 25px auto;
-            background: var(--white);
-            border: 1px solid var(--blue-mid);
-            border-radius: var(--radius);
-            padding: 25px;
-            text-align: center;
-        }
+    .profile {
+        max-width: 700px;
+        margin: 25px auto;
+        background: var(--white);
+        border: 1px solid var(--blue-mid);
+        border-radius: var(--radius);
+        padding: 25px;
+        text-align: center;
+    }
 
-        .profile img {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 12px;
-            border: 3px solid var(--blue-mid);
-        }
+    .profile img {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 12px;
+        border: 3px solid var(--blue-mid);
+    }
 
-        .profile h2 {
-            color: var(--blue-dark);
-            margin-top: 5px;
-        }
+    .profile h2 {
+        color: var(--blue-dark);
+        margin-top: 5px;
+    }
 
-        .profile a {
-            display: inline-block;
-            margin-top: 10px;
-            color: var(--blue);
-            text-decoration: none;
-            font-size: 0.85rem;
-        }
+    .profile a {
+        display: inline-block;
+        margin: 10px 6px 0 6px;
+        background: var(--blue);
+        color: var(--white);
+        text-decoration: none;
+        font-size: 0.85rem;
+        padding: 8px 14px;
+        border-radius: 999px;
+        transition: 0.2s;
+    }
 
-        /* ACTION */
-        .actions {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    .profile a:hover {
+        background: var(--blue-dark);
+    }
 
-        .actions a {
-            background: var(--blue);
-            color: var(--white);
-            padding: 10px 18px;
-            border-radius: 999px;
-            text-decoration: none;
-            font-size: 0.85rem;
-        }
+    .actions {
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
-        .actions a:hover {
-            background: #2563eb;
-        }
+    .actions button {
+        background: var(--blue);
+        color: var(--white);
+        padding: 10px 18px;
+        border-radius: 999px;
+        border: none;
+        font-size: 0.85rem;
+        cursor: pointer;
+    }
+    .actions a {
+        background: var(--blue);
+        color: var(--white);
+        padding: 10px 18px;
+        border-radius: 999px;
+        border: none;
+        font-size: 0.85rem;
+        cursor: pointer;
+    }
 
-        /* CHAT LIST */
-        .chat-list {
-            max-width: 700px;
-            margin: 0 auto 30px;
-        }
+    .actions button:hover {
+        background: #2563eb;
+    }
 
-        .chat-item {
-            background: var(--white);
-            border: 1px solid var(--blue-mid);
-            border-radius: var(--radius);
-            padding: 14px;
-            margin-bottom: 12px;
-            transition: 0.2s;
-        }
+    .chat-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: flex;
+        gap: 20px;
+    }
 
-        .chat-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 14px rgba(59,130,246,0.1);
-        }
+    .chat-column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
 
-        .chat-item a {
-            color: var(--blue);
-            text-decoration: none;
-            font-weight: 500;
-        }
+    .chat-item {
+        background: var(--white);
+        border: 1px solid var(--blue-mid);
+        border-radius: var(--radius);
+        padding: 14px;
+        margin-bottom: 12px;
+        transition: 0.2s;
+    }
 
-        .chat-item h3 {
-            font-size: 0.75rem;
-            color: var(--text-light);
-            margin-top: 4px;
-        }
+    .chat-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 14px rgba(59,130,246,0.1);
+    }
 
-        .edit {
-            display: inline-block;
-            margin-top: 6px;
-            font-size: 0.75rem;
-            color: var(--text-light);
-        }
+    .chat-item a {
+        color: var(--blue);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .chat-item h3 {
+        font-size: 0.75rem;
+        color: var(--text-light);
+        margin-top: 4px;
+    }
+
+    .chat-item .edit {
+        display: inline-block;
+        margin-top: 6px;
+        font-size: 0.75rem;
+        color: var(--text-light);
+    }
 
     </style>
-</head>
+    </head>
 
-<body>
+    <body>
 
-<header>
-    <a href="{% url 'chat_list' %}">← Zurück</a>
-    <a href="{% url 'logout' %}">Abmelden</a>
-</header>
+    <header>
+        <a href="{% url 'chat_list' %}">← Zurück</a>
+        <a href="{% url 'logout' %}">Abmelden</a>
+    </header>
 
-<div class="profile">
-    <img src="{{ profil.photo_profil.url }}">
-    <h2>Hoi! {{ profil.username }}</h2>
-    <a href="{% url 'edition_profil' profil.username %}">Profil bearbeiten</a>
-</div>
+    <div class="profile">
+        <img src="{{ profil.photo_profil.url }}">
+        <h2>Hoi! {{ profil.username }}</h2>
+        <a href="{% url 'edition_profil' profil.username %}">Profil bearbeiten</a>
+        <a href="{% url 'friends-list' %}">Freundin</a>
+    </div>
 
-<div class="actions">
-    <a href="{% url 'add_new_chat' %}">+ Neuer Chat</a>
-</div>
-
-<div class="chat-list">
-    {% for alls in all_chats %}
-        <div class="chat-item">
-            <a href="{% url 'chat' alls.id %}">{{ alls.title }}</a>
-            <h3>{{ alls.at_created }}</h3>
-            <a href="{% url 'edition_chat' alls.id %}" class="edit">Bearbeiten</a>
-            <a href="{% url 'delete_chat' alls.id %}" class="edit">Löschen</a>
+    <div class="actions">
+        <button onclick="toggleMenu()">Neuer</button>
+        <div id="menu" style="display: none; margin-top: 10px;">
+            <a href="{% url 'add_new_chat' %}">+ Neuer Chat</a>
+            <a href="{% url 'add_new_togetherChat' %}">+ Neuer Jackman Chat</a>
         </div>
-    {% endfor %}
-</div>
+    </div>
+
+    <div class="chat-container">
+        <div class="chat-column">
+            <h2>Chats mit AI</h2>
+            {% for alls in all_chats %}
+            <div class="chat-item">
+                <a href="{% url 'chat' alls.id %}">{{ alls.title }}</a>
+                <h3>{{ alls.at_created }}</h3>
+                <a href="{% url 'edition_chat' alls.id %}" class="edit">Bearbeiten</a>
+                <a href="{% url 'delete_chat' alls.id %}" class="edit">Löschen</a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="chat-column">
+            <h2>Chats mit Menschen</h2>
+            {% for alls_chat in all_group %}
+            <div class="chat-item">
+                <a href="{% url 'chat_view' alls_chat.id %}">{{ alls_chat.title }}</a>
+                <h3>{{ alls_chat.created_at }}</h3>
+                <a href="{% url 'edition_togetherChat' alls_chat.id %}" class="edit">Bearbeiten</a>
+                <a href="{% url 'delete_togetherChat' alls_chat.id %}" class="edit">Löschen</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+    function toggleMenu() {
+        let menu = document.getElementById("menu");
+        menu.style.display = (menu.style.display === "none") ? "block" : "none";
+    }
+    </script>
 
 </body>
 </html>

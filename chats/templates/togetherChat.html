@@ -1,0 +1,606 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ chat.title }} und Jakman Ai</title>
+</head>
+<body>
+    <style>
+        :root {
+        --blue:       #3b82f6;
+        --blue-dark:  #1e3a8a;
+        --blue-light: #eff6ff;
+        --blue-mid:   #dbeafe;
+        --text:       #334155;
+        --text-light: #64748b;
+        --white:      #ffffff;
+        --radius:     16px;
+    }
+
+    /* ── Базові стилі ── */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: var(--blue-light);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* ── Header ── */
+    header {
+        background: var(--white);
+        padding: 16px 32px;
+        border-bottom: 1px solid var(--blue-mid);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 2px 12px rgba(59,130,246,0.07);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .logo-dot {
+        width: 10px;
+        height: 10px;
+        background: var(--blue);
+        border-radius: 50%;
+        box-shadow: 0 0 8px rgba(59,130,246,0.5);
+    }
+
+    header h1 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--blue-dark);
+    }
+
+    /* ── Messages ── */
+    .messages {
+        flex: 1;
+        padding: 28px 20px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        max-width: 720px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .msg {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+    }
+
+    .msg.user {
+        flex-direction: row-reverse;
+    }
+
+    /* ── Avatar ── */
+    .avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 0.75rem;
+        font-weight: 600;
+
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .msg.ai .avatar {
+        background: var(--blue-mid);
+        color: var(--blue);
+        border: 1.5px solid #bfdbfe;
+    }
+
+    .msg.user .avatar {
+        background: var(--blue);
+        color: var(--white);
+    }
+
+    /* ── Content ── */
+    .content {
+        display: flex;
+        flex-direction: column;
+        max-width: 560px;
+    }
+
+    /* ── Username ── */
+    .username {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--text-light);
+        margin-bottom: 4px;
+    }
+
+    .msg.user .username {
+        text-align: right;
+        color: #646877;
+    }
+
+    /* ── Bubble ── */
+    .bubble {
+        padding: 11px 15px;
+        border-radius: var(--radius);
+        font-size: 0.88rem;
+        line-height: 1.6;
+        word-break: break-word;
+    }
+
+    .msg.ai .bubble {
+        background: var(--white);
+        border: 1px solid var(--blue-mid);
+        border-bottom-left-radius: 4px;
+        color: var(--text);
+        box-shadow: 0 2px 8px rgba(59,130,246,0.06);
+    }
+
+    .msg.user .bubble {
+        background: var(--blue);
+        border-bottom-right-radius: 4px;
+        color: var(--white);
+        box-shadow: 0 4px 14px rgba(59,130,246,0.25);
+    }
+
+    .bubble h4 {
+        font-weight: 400;
+    }
+
+    .bubble img {
+        max-width: 220px;
+        border-radius: 10px;
+        display: block;
+        margin-bottom: 8px;
+        border: 1px solid var(--blue-mid);
+    }
+
+    /* ── Input bar ── */
+    .input-bar {
+        padding: 12px 20px 28px;
+        max-width: 720px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .input-box {
+        background: var(--white);
+        border: 1.5px solid var(--blue-mid);
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 8px 8px 18px;
+        box-shadow: 0 4px 16px rgba(59,130,246,0.08);
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-box:focus-within {
+        border-color: var(--blue);
+        box-shadow: 0 4px 20px rgba(59,130,246,0.18);
+    }
+
+    .input-box input[type="text"] {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.875rem;
+        color: var(--text);
+        background: transparent;
+        min-width: 0;
+    }
+
+    .input-box input[type="text"]::placeholder {
+        color: #94a3b8;
+    }
+
+    .file-label {
+        display: flex; align-items: center; justify-content: center;
+        width: 34px; height: 34px;
+        border-radius: 50%;
+        border: 1px solid var(--blue-mid);
+        color: var(--text-light);
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+        flex-shrink: 0;
+    }
+
+    .file-label:hover {
+        background: var(--blue-mid);
+        color: var(--blue);
+    }
+
+    .file-label input { display: none; }
+
+    .icon-btn {
+        display: flex; align-items: center; justify-content: center;
+        width: 34px; height: 34px;
+        border-radius: 50%;
+        border: 1px solid var(--blue-mid);
+        background: transparent;
+        color: var(--text-light);
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+        flex-shrink: 0;
+        font-size: 0.85rem;
+    }
+
+    .icon-btn:hover {
+        background: var(--blue-mid);
+        color: var(--blue);
+    }
+
+    .send-btn {
+        display: flex; align-items: center; justify-content: center;
+        width: 38px; height: 38px;
+        border-radius: 50%;
+        background: var(--blue);
+        border: none;
+        color: var(--white);
+        cursor: pointer;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+        transition: background 0.2s, transform 0.15s;
+    }
+
+    .send-btn:hover {
+        background: #2563eb;
+        transform: scale(1.07);
+    }
+
+    .speak-btn {
+        padding: 4px 12px;
+        background: var(--blue-light);
+        border: 1px solid #bfdbfe;
+        border-radius: 999px;
+        color: var(--blue);
+        font-family: 'Inter', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .speak-btn:hover { background: var(--blue-mid); }
+
+    audio {
+        display: block;
+        margin-top: 8px;
+        height: 30px;
+        accent-color: var(--blue);
+    }
+
+    /* ── Empty state ── */
+    .empty {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: 10px;
+        padding: 40px 20px;
+    }
+
+    .empty h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--blue-dark);
+    }
+
+    .empty p {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        max-width: 300px;
+        line-height: 1.6;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+        .messages, .input-bar {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        header {
+            padding: 14px 16px;
+        }
+    }
+    </style>
+
+    <header>
+        <div class="logo-dot"></div>
+        <h1>{{ chat.title }} und Jakman Ai</h1>
+        <a href="{% url 'profil_user' %}" style="display: inline-block;
+    background: var(--blue);
+    color: var(--white);
+    padding: 10px 18px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: 0.2s;">Profil</a>
+    <a href="{% url 'list_user_in_togetherChat' chat.id %}">list user</a>
+    </header>
+
+    {% if message %}
+        <div class="messages" id="messages">
+            {% for messages in message %}
+                {% if messages.is_AI == True %}
+                    <div class="msg ai">
+                        <div class="avatar">AI</div>
+                        <div class="content">
+                            <div class="username">AI</div>
+                            <div class="bubble">
+                                {% if messages.file %}
+                                    <img src="{{ messages.file.url }}">
+                                {% endif %}
+                                <h4>{{ messages.text }}</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                {% else %}
+                    {% if request.user == messages.sender %}
+                        <!-- ТИ -->
+                        <div class="msg user">
+                            <div class="avatar">
+                                <img src="{{ messages.sender.photo_profil.url }}">
+                            </div>
+                            <div class="content">
+                                <div class="username">{{ messages.sender }}</div>
+                                <div class="bubble">
+                                    {% if messages.file %}
+                                        <img src="{{ messages.file.url }}">
+                                    {% endif %}
+                                    <h4>{{ messages.text }}</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% else %}
+                        <!-- ІНШИЙ КОРИСТУВАЧ -->
+                        <div class="msg">
+                            <div class="avatar">
+                                <img src="{{ messages.sender.photo_profil.url }}">
+                            </div>
+                            <div class="content">
+                                <div class="username">{{ messages.sender }}</div>
+                                <div class="bubble">
+                                    {% if messages.file %}
+                                        <img src="{{ messages.file.url }}">
+                                    {% endif %}
+                                    <h4>{{ messages.text }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty">
+            <div style="font-size:2.4rem;margin-bottom:4px;">💬</div>
+            <h2>Ein Gespräch beginnen</h2>
+            <p>Fragen Sie mich alles – ich bin hier, um Ihnen dabei zu helfen, schneller zu denken und smarter zu arbeiten.</p>
+        </div>
+    {% endif %}
+
+    <div class="input-bar">
+        <form method="post" enctype="multipart/form-data" id="chat-form">
+            {% csrf_token %}
+            <div class="input-box">
+                <label class="file-label" title="Attach file">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                    </svg>
+                    <input type="file" name="file" accept="image/*" id="file-input">
+                </label>
+                <img id="preview" style="max-width: 120px; display: none; border-radius: 10px;">
+                <input type="text" name="message_text" id="recognition" placeholder="Gib eine Nachricht ein…">
+                <button type="button" class="icon-btn" id="start-btn" title="Voice input">🎙️</button>
+                <button type="button" class="send-btn ai-btn" id="ai-btn" title="Send to AI">AI</button>
+                <button type="button" class="send-btn" id="send-btn" title="Send">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="22" y1="2" x2="11" y2="13"/>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                    </svg>
+                </button>
+            </div>
+        </form>
+        <p class="hint">Jakman Ai können Fehler machen. Überprüfen Sie wichtige Informationen.</p>
+    </div>
+
+    <script>
+        const chatId = "{{ chat.id }}";
+        const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+        const socket = new WebSocket(`${protocol}://${window.location.host}/ws/chat/${chatId}/`);
+
+        socket.onopen  = () => console.log("✅ WebSocket підключено");
+        socket.onerror = (e) => console.log("❌ WebSocket помилка", e);
+        socket.onclose = () => console.log("❌ WebSocket закритий");
+
+        // ── Гарантуємо що блок messages існує ────────────────────────────
+        function getMessagesContainer() {
+            let container = document.getElementById("messages");
+            if (!container) {
+                const empty = document.querySelector(".empty");
+                if (empty) empty.remove();
+
+                container = document.createElement("div");
+                container.classList.add("messages");
+                container.id = "messages";
+                document.querySelector(".input-bar").before(container);
+            }
+            return container;
+        }
+
+        // ── Рендер повідомлення ───────────────────────────────────────────
+        function renderMessage({ message_type, text, file_url, filename }) {
+            const container = getMessagesContainer();
+            const isAI = message_type === 'ai';
+
+            const div = document.createElement("div");
+            div.classList.add("msg", isAI ? "ai" : "user");
+
+            let fileHTML = '';
+            if (file_url) {
+                const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(file_url);
+                fileHTML = isImage
+                    ? `<img src="${file_url}" alt="image" style="max-width:220px;border-radius:10px;margin-bottom:6px;">`
+                    : `<a href="${file_url}" target="_blank">📎 ${filename || 'файл'}</a>`;
+            }
+
+            div.innerHTML = `
+                <div class="avatar">${isAI ? 'AI' : 'U'}</div>
+                <div class="bubble">
+                    ${fileHTML}
+                    ${text ? `<h4>${text}</h4>` : ''}
+                </div>
+            `;
+
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // ── Індикатор "AI друкує..." ──────────────────────────────────────
+        function showTyping() {
+            const container = getMessagesContainer();
+            const div = document.createElement("div");
+            div.classList.add("msg", "ai");
+            div.id = "typing-indicator";
+            div.innerHTML = `
+                <div class="avatar">AI</div>
+                <div class="bubble"><h4>…</h4></div>
+            `;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function hideTyping() {
+            document.getElementById("typing-indicator")?.remove();
+        }
+
+        // ── Отримання повідомлень ─────────────────────────────────────────
+        socket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            if (data.type === 'chat_message') {
+                hideTyping();
+                renderMessage(data);
+            }
+        };
+
+        // ── Голос ────────────────────────────────────────────────────────
+        const recognition = new webkitSpeechRecognition();
+        recognition.lang = "de-DE";
+        recognition.onresult = (event) => {
+            document.getElementById("recognition").value = event.results[0][0].transcript;
+        };
+        document.getElementById("start-btn").onclick = (e) => {
+            e.preventDefault();
+            recognition.start();
+        };
+
+        // ── Файл preview ──────────────────────────────────────────────────
+        document.getElementById("file-input").onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const img = document.getElementById("preview");
+            img.src = URL.createObjectURL(file);
+            img.style.display = "block";
+        };
+
+        // ── Головна функція відправки ─────────────────────────────────────
+        async function sendMessage(forAI) {
+            if (socket.readyState !== WebSocket.OPEN) {
+                console.log("❌ сокет не відкритий");
+                return;
+            }
+
+            const textInput = document.getElementById("recognition");
+            const fileInput = document.getElementById("file-input");
+            const text = textInput.value.trim();
+            const file = fileInput.files[0];
+
+            if (!text && !file) return;
+
+            const payload = { message: text, for_AI: forAI };
+
+            if (file) {
+                payload.file = await toBase64(file);
+                payload.filename = file.name;
+                payload.mime_type = file.type;
+
+                renderMessage({
+                    message_type: 'user',
+                    text,
+                    file_url: URL.createObjectURL(file),
+                    filename: file.name,
+                });
+
+                fileInput.value = '';
+                const preview = document.getElementById("preview");
+                preview.src = '';
+                preview.style.display = 'none';
+            } else {
+                renderMessage({ message_type: 'user', text });
+            }
+
+            socket.send(JSON.stringify(payload));
+            textInput.value = "";
+
+            if (forAI) showTyping();
+        }
+
+        // ── Кнопка Send (без AI) ──────────────────────────────────────────
+        document.getElementById("send-btn").onclick = () => sendMessage(false);
+
+        // ── Кнопка AI ────────────────────────────────────────────────────
+        document.getElementById("ai-btn").onclick = () => sendMessage(true);
+
+        // ── Enter → Send без AI ───────────────────────────────────────────
+        document.getElementById("recognition").addEventListener("keydown", (e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage(false);
+            }
+        });
+
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // ── Скрол вниз при завантаженні ──────────────────────────────────
+        window.addEventListener("load", () => {
+            const container = document.getElementById("messages");
+            if (container) container.scrollTop = container.scrollHeight;
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friend</title>
+    <header>
+        <a href="{% url 'friends-list' %}">Zurück</a>
+    </header>
+</head>
+<body>
+    <style>
+        :root {
+            --blue: #3b82f6;
+            --blue-dark: #1e3a8a;
+            --blue-light: #eff6ff;
+            --blue-mid: #dbeafe;
+            --text: #334155;
+            --text-light: #64748b;
+            --white: #ffffff;
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--blue-light);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--blue-dark);
+            margin-bottom: 14px;
+        }
+
+        .friend-request {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--white);
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .friend-request-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .friend-request-info h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin: 2px 0;
+        }
+
+        .friend-request-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .friend-request-actions a {
+            background: var(--blue);
+            color: var(--white);
+            padding: 6px 14px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+
+        .friend-request-actions a:hover {
+            background: var(--blue-dark);
+        }
+
+        .friend-request-actions a.unaccept {
+            background: #ef4444;
+        }
+
+        .friend-request-actions a.unaccept:hover {
+            background: #b91c1c;
+        }
+        /* Загальний стиль для header на сторінках друзів/чату */
+        header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        header a {
+            text-decoration: none;
+            background: var(--blue);
+            color: var(--white);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+
+        header a:hover {
+            background: var(--blue-dark);
+        }
+    </style>
+
+    <h2>Freundschaftsanfragen</h2>
+
+    {% for all in alls %}
+        <div class="friend-request">
+            <div class="friend-request-info">
+                <h3>{{ all.sender }}</h3>
+                <h3>{{ all.created_at }}</h3>
+            </div>
+            <div class="friend-request-actions">
+                <a href="{% url 'accept_friend_request' all.id %}">Akzeptieren</a>
+                <a href="{% url 'unaccept_friend_request' all.id %}" class="unaccept">Nicht akzeptieren</a>
+            </div>
+        </div>
+    {% endfor %}
+</body>
+</html>

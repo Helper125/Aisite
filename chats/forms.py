@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-from .models import Chat
+from .models import Chat, TogetherChat
 
 User = get_user_model()
 
@@ -23,3 +23,9 @@ class ProfilEdit(forms.ModelForm):
     class Meta:
         model = User
         fields = ["photo_profil"]
+
+
+class TogetherChatName(forms.ModelForm):
+    class Meta:
+        model = TogetherChat
+        fields = ["title"]

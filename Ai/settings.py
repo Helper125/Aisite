@@ -27,7 +27,6 @@ SECRET_KEY = 'django-insecure-2#h4&yt(qj*y+*5+4j33xt^#syju((c7%+5d$gtv#3j--vvkha
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-CSRF_COOKIE_SECURE = True          # обов’язково для HTTPS
 CSRF_TRUSTED_ORIGINS = ["https://aisite-production.up.railway.app"]
 SESSION_COOKIE_SECURE = True
 
@@ -39,6 +38,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -81,6 +81,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Ai.wsgi.application'
+
+ASGI_APPLICATION =  'Ai.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis://default:YvRAOWlPlyalQHklcEJGqsvQufrOddNd@gondola.proxy.rlwy.net:12596")],
+        },
+    },
+}
 
 
 # Database
